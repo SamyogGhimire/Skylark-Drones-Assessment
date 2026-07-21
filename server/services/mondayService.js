@@ -24,7 +24,9 @@ async function fetchBoardFromMonday(boardId, apiKey) {
             name
             column_values {
               id
-              title
+              column {
+                title
+              }
               text
               value
             }
@@ -66,8 +68,9 @@ async function fetchBoardFromMonday(boardId, apiKey) {
     const row = { id: item.id, 'Deal Name': item.name, name: item.name };
     if (Array.isArray(item.column_values)) {
       item.column_values.forEach((col) => {
-        if (col.title) {
-          row[col.title] = col.text || col.value || '';
+        const title = col.column?.title || col.title || '';
+        if (title) {
+          row[title] = col.text || col.value || '';
         }
       });
     }
