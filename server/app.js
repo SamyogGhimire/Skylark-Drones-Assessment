@@ -3,6 +3,13 @@ const cors = require("cors");
 const fs = require("fs");
 const path = require("path");
 
+const app = express();
+
+app.use(cors({
+  origin: 'https://skylark-drones-assessment.vercel.app',
+  methods: ['GET', 'POST'],
+}));
+
 // Load environment variables
 try {
   require("dotenv").config();
@@ -20,8 +27,6 @@ try {
   throw err;
 }
 
-const app = express();
-
 // Startup validation
 const hasEnvConfig = process.env.MONDAY_API_KEY && process.env.DEALS_BOARD_ID && process.env.WORK_ORDERS_BOARD_ID;
 const csvPath = path.join(__dirname, 'data');
@@ -35,17 +40,6 @@ console.log(`[Startup] CSV data available: ${hasCSVData}`);
 if (!hasEnvConfig && !hasCSVData) {
   console.warn('[Startup] WARNING: Neither Monday.com API nor CSV data is available. The service will have limited functionality.');
 }
-
-const allowedOrigins = [
-  'http://localhost:3000',
-  'https://skylark-drones-assessment.vercel.app',
-];
-app.use(cors({
-  origin: (origin, callback) => {
-    if (!origin || allowedOrigins.includes(origin)) callback(null, true);
-    else callback(new Error('Not allowed by CORS'));
-  },
-}));
 
 app.use("/api", chatRouter);
 
