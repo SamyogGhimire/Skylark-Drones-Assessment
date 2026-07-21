@@ -36,11 +36,16 @@ if (!hasEnvConfig && !hasCSVData) {
   console.warn('[Startup] WARNING: Neither Monday.com API nor CSV data is available. The service will have limited functionality.');
 }
 
+const allowedOrigins = [
+  'http://localhost:3000',
+  'https://skylark-drones-assessment.vercel.app',
+];
 app.use(cors({
-  origin: 'https://skylark-drones-assessment.vercel.app',
-  methods: ['GET', 'POST'],
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) callback(null, true);
+    else callback(new Error('Not allowed by CORS'));
+  },
 }));
-app.use(express.json());
 
 app.use("/api", chatRouter);
 
