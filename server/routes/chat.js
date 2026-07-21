@@ -19,38 +19,45 @@ router.post('/chat', async (req, res) => {
 
     console.log(`[Chat Route] Processing user question: "${message}"`);
 
-    // 1. Fetch raw board data concurrently (from Monday.com API or CSV fallbacks)
-    const [dealsResult, workOrdersResult] = await Promise.all([
-      getDealsData(),
-      getWorkOrdersData(),
-    ]);
+    try {
+      // 1. Fetch raw board data concurrently (from Monday.com API or CSV fallbacks)
+      const [dealsResult, workOrdersResult] = await Promise.all([
+        getDealsData(),
+        getWorkOrdersData(),
+      ]);
 
-    // 2. Clean & normalize data
-    const cleanedDeals = cleanDealsData(dealsResult.data);
-    const cleanedWorkOrders = cleanWorkOrdersData(workOrdersResult.data);
+      // 2. Clean & normalize data
+      const cleanedDeals = cleanDealsData(dealsResult.data);
+      const cleanedWorkOrders = cleanWorkOrdersData(workOrdersResult.data);
 
-    // 3. Perform Business Intelligence analysis
-    const analysis = analyzeQuestion(message, cleanedDeals, cleanedWorkOrders);
+      console.log(`[Chat Route] Cleaned data - Deals: ${cleanedDeals.length}, Work Orders: ${cleanedWorkOrders.length}`);
 
-    // 4. Generate executive AI response (OpenAI or smart fallback)
-    const answer = await generateAIResponse(message, analysis);
+      // 3. Perform Business Intelligence analysis
+      const analysis = analyzeQuestion(message, cleanedDeals, cleanedWorkOrders);
 
-    return res.json({
-      success: true,
-      answer,
-      intent: analysis.intent,
-      sources: {
-        deals: dealsResult.source,
-        workOrders: workOrdersResult.source,
-      },
-      metrics: {
-        pipeline: analysis.pipelineMetrics,
-        revenue: analysis.revenueMetrics,
-        risks: analysis.riskMetrics,
-      },
-    });
+      // 4. Generate executive AI response (OpenAI or smart fallback)
+      const answer = await generateAIResponse(message, analysis);
+
+      return res.json({
+        success: true,
+        answer,
+        intent: analysis.intent,
+        sources: {
+          deals: dealsResult.source,
+          workOrders: workOrdersResult.source,
+        },
+        metrics: {
+          pipeline: analysis.pipelineMetrics,
+          revenue: analysis.revenueMetrics,
+          risks: analysis.riskMetrics,
+        },
+      });
+    } catch (analysisErr) {
+      console.error('[Chat Route Analysis Error]:', analysisErr);
+      throw analysisErr;
+    }
   } catch (err) {
-    console.error('[Chat Route Error]:', err);
+    console.error('[Chat Route Error]:', err.message, err.stack);
     return res.status(500).json({
       error: 'An internal server error occurred while processing your query.',
       details: err.message,

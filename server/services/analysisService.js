@@ -10,7 +10,22 @@ const { formatCurrency } = require('./cleaner');
  */
 function getPipelineHealth(deals) {
   if (!Array.isArray(deals) || deals.length === 0) {
-    return { totalDeals: 0, totalPipelineValue: 0, activePipelineValue: 0 };
+    return { 
+      totalDeals: 0, 
+      activeDealsCount: 0,
+      wonDealsCount: 0,
+      totalPipelineValue: 0, 
+      formattedTotalPipeline: '₹0',
+      activePipelineValue: 0,
+      formattedActivePipeline: '₹0',
+      weightedPipelineValue: 0,
+      formattedWeightedPipeline: '₹0',
+      wonPipelineValue: 0,
+      formattedWonPipeline: '₹0',
+      stageBreakdown: {},
+      sectorBreakdown: {},
+      probabilityBreakdown: { High: 0, Medium: 0, Low: 0, Unspecified: 0 }
+    };
   }
 
   let totalValue = 0;
@@ -97,7 +112,23 @@ function getPipelineHealth(deals) {
  */
 function getRevenueAnalysis(workOrders) {
   if (!Array.isArray(workOrders) || workOrders.length === 0) {
-    return { totalPOValue: 0, totalBilledValue: 0, totalCollectedAmount: 0 };
+    return { 
+      totalWorkOrders: 0,
+      totalPOValue: 0, 
+      formattedTotalPO: '₹0',
+      totalBilledValue: 0,
+      formattedTotalBilled: '₹0',
+      totalCollectedAmount: 0,
+      formattedTotalCollected: '₹0',
+      totalReceivable: 0,
+      formattedTotalReceivable: '₹0',
+      totalToBeBilled: 0,
+      formattedTotalToBeBilled: '₹0',
+      billingEfficiencyPercent: 0,
+      collectionEfficiencyPercent: 0,
+      natureBreakdown: {},
+      statusBreakdown: {}
+    };
   }
 
   let totalPO = 0;
