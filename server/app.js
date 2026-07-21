@@ -55,7 +55,34 @@ app.get("/", (req, res) => {
 app.get("/health", (req, res) => {
     res.json({
         status: "ok",
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
+        env: {
+          hasMonday: !!process.env.MONDAY_API_KEY,
+          hasDealsBoard: !!process.env.DEALS_BOARD_ID,
+          hasWorkOrdersBoard: !!process.env.WORK_ORDERS_BOARD_ID,
+          hasGroq: !!process.env.GROQ_API_KEY,
+        },
+        csvData: {
+          hasData: hasCSVData
+        }
+    });
+});
+
+app.get("/debug", (req, res) => {
+    res.json({
+        environment: {
+          hasMonday: !!process.env.MONDAY_API_KEY,
+          hasDealsBoard: !!process.env.DEALS_BOARD_ID,
+          hasWorkOrdersBoard: !!process.env.WORK_ORDERS_BOARD_ID,
+          hasGroq: !!process.env.GROQ_API_KEY,
+          csvData: hasCSVData,
+          nodeEnv: process.env.NODE_ENV,
+        },
+        paths: {
+          cwd: process.cwd(),
+          dirname: __dirname,
+          csvPath: csvPath,
+        }
     });
 });
 
