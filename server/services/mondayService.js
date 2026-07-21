@@ -84,6 +84,7 @@ async function fetchBoardFromMonday(boardId, apiKey) {
 function readLocalCSV(filename, skipHeaderRows = 0) {
   const possiblePaths = [
     path.join(__dirname, '..', 'data', filename),
+    path.join(__dirname, '..', '..', 'data', filename),
     path.join('/home/samyog-ghimire/Downloads', filename),
     path.join(process.cwd(), 'data', filename),
     path.join(process.cwd(), 'server', 'data', filename),
@@ -91,14 +92,19 @@ function readLocalCSV(filename, skipHeaderRows = 0) {
 
   let filePath = null;
   for (const p of possiblePaths) {
-    if (fs.existsSync(p)) {
-      filePath = p;
-      break;
+    try {
+      if (fs.existsSync(p)) {
+        filePath = p;
+        console.log(`[mondayService] Found CSV file at: ${filePath}`);
+        break;
+      }
+    } catch (err) {
+      console.warn(`[mondayService] Error checking path ${p}: ${err.message}`);
     }
   }
 
   if (!filePath) {
-    console.warn(`[mondayService] Warning: Could not find CSV file ${filename} in searched paths.`);
+    console.warn(`[mondayService] Warning: Could not find CSV file ${filename} in any of the searched paths.`);
     return [];
   }
 
@@ -111,6 +117,7 @@ function readLocalCSV(filename, skipHeaderRows = 0) {
       from_line: skipHeaderRows + 1,
       relax_column_count: true,
     });
+    console.log(`[mondayService] Successfully parsed ${records.length} records from ${filename}`);
     return records;
   } catch (err) {
     console.error(`[mondayService] Error parsing CSV file ${filePath}:`, err.message);

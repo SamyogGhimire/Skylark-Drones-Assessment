@@ -79,6 +79,8 @@ router.get('/summary', async (req, res) => {
     const cleanedDeals = cleanDealsData(dealsResult.data);
     const cleanedWorkOrders = cleanWorkOrdersData(workOrdersResult.data);
 
+    console.log(`[Summary Route] Cleaned data - Deals: ${cleanedDeals.length}, Work Orders: ${cleanedWorkOrders.length}`);
+
     const summary = getLeadershipSummary(cleanedDeals, cleanedWorkOrders);
 
     return res.json({
@@ -90,7 +92,7 @@ router.get('/summary', async (req, res) => {
       },
     });
   } catch (err) {
-    console.error('[Summary Route Error]:', err);
+    console.error('[Summary Route Error]:', err.message, err.stack);
     return res.status(500).json({ error: 'Failed to generate leadership summary.', details: err.message });
   }
 });

@@ -1,4 +1,11 @@
-const Groq = require('groq-sdk');
+let Groq;
+try {
+  Groq = require('groq-sdk');
+} catch (err) {
+  console.warn('[aiService] Failed to load Groq SDK:', err.message);
+  Groq = null;
+}
+
 const { formatCurrency } = require('./cleaner');
 
 /**
@@ -134,8 +141,8 @@ ${sectorMetrics.sectors.slice(0, 3).map(s => `- **${s.name}**: Pipeline ${s.form
 async function generateAIResponse(userMessage, analysis) {
   const apiKey = process.env.GROQ_API_KEY;
 
-  if (!apiKey || apiKey.includes('your_groq_api_key')) {
-    console.log('[aiService] Groq API key not set in .env. Using built-in metric intelligence.');
+  if (!Groq || !apiKey || apiKey.includes('your_groq_api_key')) {
+    console.log('[aiService] Groq API not available. Using built-in metric intelligence.');
     return generateFallbackResponse(userMessage, analysis);
   }
 

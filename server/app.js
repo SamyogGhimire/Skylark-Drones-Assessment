@@ -2,9 +2,23 @@ const express = require("express");
 const cors = require("cors");
 const fs = require("fs");
 const path = require("path");
-require("dotenv").config();
 
-const chatRouter = require("../routes/chat");
+// Load environment variables
+try {
+  require("dotenv").config();
+  console.log('[Startup] Environment variables loaded');
+} catch (err) {
+  console.warn('[Startup] Warning: Failed to load .env file:', err.message);
+}
+
+let chatRouter;
+try {
+  chatRouter = require("../routes/chat");
+  console.log('[Startup] Chat router loaded');
+} catch (err) {
+  console.error('[Startup] CRITICAL: Failed to load chat router:', err.message);
+  throw err;
+}
 
 const app = express();
 
@@ -33,7 +47,8 @@ app.get("/", (req, res) => {
         service: "Skylark BI Agent",
         dataSource: hasEnvConfig ? "monday.com" : "csv",
         hasEnvConfig,
-        hasCSVData
+        hasCSVData,
+        timestamp: new Date().toISOString()
     });
 });
 
@@ -43,5 +58,17 @@ app.get("/health", (req, res) => {
         timestamp: new Date().toISOString()
     });
 });
+
+// Global error handler for unhandled errors
+app.use((err, req, res, next) => {
+  console.error('[Global Error Handler]:', err);
+  res.status(500).json({
+    error: 'Internal server error',
+    message: err.message,
+    timestamp: new Date().toISOString()
+  });
+});
+
+console.log('[Startup] Express app configured successfully');
 
 module.exports = app;
