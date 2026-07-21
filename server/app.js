@@ -13,7 +13,7 @@ try {
 
 let chatRouter;
 try {
-  chatRouter = require("../routes/chat");
+  chatRouter = require("./routes/chat");
   console.log('[Startup] Chat router loaded');
 } catch (err) {
   console.error('[Startup] CRITICAL: Failed to load chat router:', err.message);
