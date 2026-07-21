@@ -4,6 +4,9 @@ import KpiBar from './components/KpiBar';
 import Chat from './components/Chat';
 import InputBox from './components/InputBox';
 
+const API_URL = import.meta.env.VITE_API_URL || '';
+
+
 function App() {
   const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -28,10 +31,10 @@ function App() {
     }
   }, [darkMode]);
 
-  const fetchKpiSummary = async () => {
+const fetchKpiSummary = async () => {
     setIsKpiLoading(true);
     try {
-      const res = await fetch('/api/summary');
+      const res = await fetch(`${API_URL}/api/summary`);
       const data = await res.json();
       if (data.success && data.summary) {
         setKpiSummary(data.summary);
@@ -57,7 +60,7 @@ function App() {
     setIsLoading(true);
 
     try {
-      const response = await fetch('/api/chat', {
+      const response = await fetch(`${API_URL}/api/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: userText }),
