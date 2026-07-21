@@ -4,7 +4,7 @@ A full-stack Business Intelligence (BI) agent that compiles and analyzes founder
 
 ---
 
-## 🚀 Key Features
+##  Key Features
 
 *   **Executive Intelligence Dashboard:** Real-time summary cards for Active Pipeline, Billed Revenue, Delayed Projects, and Cash Collections.
 *   **Natural Language Querying:** Conversational AI query endpoint powered by Groq SDK (LLaMA 3.3 70B model).
@@ -13,7 +13,7 @@ A full-stack Business Intelligence (BI) agent that compiles and analyzes founder
 
 ---
 
-## 🛠️ Tech Stack
+##  Tech Stack
 
 *   **Frontend:** React (Vite), Tailwind CSS, Lucide Icons, PostCSS.
 *   **Backend:** Node.js, Express, Groq SDK, Axios, CSV-Parse.
@@ -21,7 +21,7 @@ A full-stack Business Intelligence (BI) agent that compiles and analyzes founder
 
 ---
 
-## 🏗️ System Architecture & Data Flow
+##  System Architecture & Data Flow
 
 The project is built on a decoupled Client-Server architecture utilizing a services-oriented pattern on the backend to cleanly separate data retrieval, normalization, business logic, and AI response synthesis.
 
@@ -56,7 +56,7 @@ graph TD
 
 ---
 
-## 📂 Project Structure
+##  Project Structure
 
 ```text
 Skylark-Drones-Assessment/
@@ -76,7 +76,7 @@ Skylark-Drones-Assessment/
 
 ---
 
-## ⚙️ Setup & Installation
+##  Setup & Installation
 
 ### 1. Prerequisites
 Ensure you have [Node.js](https://nodejs.org/) installed (v18+ recommended).
@@ -107,7 +107,7 @@ npm run dev      # Starts dev server on http://localhost:3000
 
 ---
 
-## 🔌 API Documentation
+##  API Documentation
 
 *   **`GET /health`**
     *   Health check endpoint.
@@ -116,3 +116,6 @@ npm run dev      # Starts dev server on http://localhost:3000
 *   **`POST /api/chat`**
     *   Processes executive business intelligence queries.
     *   **Body:** `{ "message": "query string" }`
+
+## Website Screenshot
+![Webpage](Webpage.png)
