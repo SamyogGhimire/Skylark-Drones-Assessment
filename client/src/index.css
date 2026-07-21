@@ -4,15 +4,15 @@
 
 @layer base {
   body {
-    @apply bg-[#0B0F19] text-slate-100 font-sans antialiased selection:bg-indigo-500/30 selection:text-indigo-200;
+    @apply bg-slate-50 dark:bg-[#080B11] text-slate-800 dark:text-slate-200 font-sans antialiased selection:bg-indigo-500/20 selection:text-indigo-900 dark:selection:bg-indigo-500/30 dark:selection:text-indigo-200;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   }
 }
 
-/* Custom scrollbar styling */
+/* Custom Scrollbar Styling (Linear/Stripe Style) */
 ::-webkit-scrollbar {
-  width: 5px;
-  height: 5px;
+  width: 6px;
+  height: 6px;
 }
 
 ::-webkit-scrollbar-track {
@@ -20,19 +20,46 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #1e293b;
+  background: rgba(148, 163, 184, 0.15);
   border-radius: 9999px;
+  transition: background 0.2s ease;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #334155;
+  background: rgba(148, 163, 184, 0.35);
 }
 
-/* Animations */
+.dark ::-webkit-scrollbar-thumb {
+  background: rgba(51, 65, 85, 0.3);
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: rgba(71, 85, 105, 0.6);
+}
+
+/* No Scrollbar Utility */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+/* Base Animations */
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
   }
   to {
     opacity: 1;
@@ -40,16 +67,94 @@
   }
 }
 
+@keyframes pulseGlow {
+  0%, 100% {
+    opacity: 0.8;
+    box-shadow: 0 0 8px 1px rgba(16, 185, 129, 0.2);
+  }
+  50% {
+    opacity: 0.4;
+    box-shadow: 0 0 16px 2px rgba(16, 185, 129, 0.4);
+  }
+}
+
+@keyframes pulseGlowIndigo {
+  0%, 100% {
+    box-shadow: 0 0 12px 1px rgba(99, 102, 241, 0.1);
+  }
+  50% {
+    box-shadow: 0 0 20px 3px rgba(99, 102, 241, 0.25);
+  }
+}
+
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Utility Animation Classes */
 .animate-fade-in {
-  animation: fadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: fadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-@keyframes pulseSlow {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.4; }
+.animate-fade-in-up {
+  animation: fadeInUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-.animate-pulse-slow {
-  animation: pulseSlow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+.animate-pulse-glow {
+  animation: pulseGlow 2.5s infinite ease-in-out;
 }
+
+.animate-pulse-glow-indigo {
+  animation: pulseGlowIndigo 3s infinite ease-in-out;
+}
+
+.animate-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.animate-shimmer::after {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  transform: translateX(-100%);
+  background-image: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.05) 20%,
+    rgba(255, 255, 255, 0.1) 60%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  animation: shimmer 1.5s infinite;
+  content: '';
+}
+
+.dark .animate-shimmer::after {
+  background-image: linear-gradient(
+    90deg,
+    rgba(15, 23, 42, 0) 0%,
+    rgba(15, 23, 42, 0.2) 20%,
+    rgba(15, 23, 42, 0.4) 60%,
+    rgba(15, 23, 42, 0) 100%
+  );
+}
+
+/* Premium Border/Glow Effects */
+.glass-panel {
+  @apply bg-white/70 dark:bg-[#0d121f]/75 border border-slate-200/60 dark:border-slate-800/80 backdrop-blur-md;
+}
+
+.interactive-card {
+  @apply bg-white dark:bg-[#0D121F] border border-slate-200/80 dark:border-slate-800/85 hover:border-slate-300 dark:hover:border-slate-700/60 rounded-xl transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-[1px] hover:shadow-[0_8px_30px_rgb(0,0,0,0.02)] dark:hover:shadow-[0_8px_30px_rgb(0,0,0,0.2)];
+}
+
+/* Elegant Focus State for Accessibility */
+.focus-ring {
+  @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/50 dark:focus-visible:ring-indigo-500/40 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900;
+}
+
 
