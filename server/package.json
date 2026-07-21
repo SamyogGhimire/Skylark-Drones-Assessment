@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
+    "@vercel/node": "^5.3.19",
     "axios": "^1.6.8",
     "cors": "^2.8.5",
     "csv-parse": "^5.5.5",
