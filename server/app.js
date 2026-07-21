@@ -36,7 +36,10 @@ if (!hasEnvConfig && !hasCSVData) {
   console.warn('[Startup] WARNING: Neither Monday.com API nor CSV data is available. The service will have limited functionality.');
 }
 
-app.use(cors());
+app.use(cors({
+  origin: 'https://skylark-drones-assessment.vercel.app',
+  methods: ['GET', 'POST'],
+}));
 app.use(express.json());
 
 app.use("/api", chatRouter);
